@@ -1,82 +1,104 @@
-import AssigmentModel from '../entities/assignment.entity.js';
 import { CUSTOM_LABELS } from '../shared/utils/mongooseUtils.js';
+import AssignmentModel from '../entities/assignment.entity.js';
+import { isEmpty } from '../shared/utils/tools.js';
+import { HttpException } from '../shared/exception/httpException.js';
+import HTTP_STATUS from '../shared/http/httpStatus.js';
+import { EUserRole } from '../entities/user.entity.js';
 
 
-export async function getAssignments(
-    {
-        query,
-        page,
-        limit,
+const AssignmentsService = {
+    get: async function ({ page, limit,  ...filters }) {
+
+        return AssignmentModel.paginate(
+            {
+                ...filters,
+                deleted: false,
+            },
+            {
+                page,
+                limit,
+                lean: true,
+                customLabels: CUSTOM_LABELS,
+                populate: ['student', 'subject'],
+            },
+        );
+
     },
-) {
+    getOne: async function (query) {
 
-    const options = {
-        page,
-        limit,
-        lean: true,
-        allowDiskUse: true,
-        customLabels: CUSTOM_LABELS,
-    };
+        if (isEmpty(query)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'Missing query on assignments.');
 
-    return AssigmentModel.paginate(query, options);
+        return AssignmentModel
+            .findOne(query)
+            .populate(['student', 'subject'])
+            .lean();
 
-}
+    },
+    create: async function ({ payload, student }) {
 
+        if (isEmpty(payload)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No content to save.');
 
-// Récupérer un assignment par son id (GET)
-export async function getAssignment(assignmentId) {
+        if (student.role !== EUserRole.STUDENT) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A teacher can\'t create an assignment.');
 
-    return AssigmentModel.findOne({ _id: assignmentId })
+        const {
+            title,
+            subject,
+        } = payload;
 
-}
+        const assignment = new AssignmentModel();
 
+        assignment.title = title;
+        assignment.student = student._id;
+        assignment.subject = subject;
 
-// Ajout d'un assignment (POST)
-export function postAssignment(req, res) {
-    let assignment = new Assignment();
-    assignment.id = req.body.id;
-    assignment.nom = req.body.nom;
-    assignment.dateDeRendu = req.body.dateDeRendu;
-    assignment.rendu = req.body.rendu;
+        await assignment.save();
 
-    console.log('POST assignment reçu :');
-    console.log(assignment);
+        return assignment;
 
-    assignment.save((err) => {
-        if (err) {
-            res.send('cant post assignment ', err);
-        }
-        res.json({ message: `${assignment.nom} saved!` });
-    });
-}
+    },
+    update: async function ({ assignmentId, payload, teacher }) {
 
+        if (isEmpty(payload)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No assignment to update.');
 
-// Update d'un assignment (PUT)
-export function updateAssignment(req, res) {
-    console.log('UPDATE recu assignment : ');
-    console.log(req.body);
-    Assignment.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, assignment) => {
-        if (err) {
-            console.log(err);
-            res.send(err);
-        } else {
-            res.json({ message: 'updated' });
-        }
+        if (teacher.role !== EUserRole.TEACHER) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A student can\'t create an assignment.');
 
-        // console.log('updated ', assignment)
-    });
+        const {
+            student,
+            confirm,
+            score,
+            remark,
+        } = payload;
 
-}
+        const {
+            acknowledged,
+            matchedCount,
+            modifiedCount,
+        } = await AssignmentModel.updateOne(
+            { _id: assignmentId, student, confirm: false },
+            { $set: { confirm, score, remark } },
+        );
 
+        if (!acknowledged || matchedCount === 0 || modifiedCount === 0) HttpException.throw(HTTP_STATUS.NOT_FOUND_ERROR, 'No assignment found.');
 
-// suppression d'un assignment (DELETE)
-// l'id est bien le _id de mongoDB
-export function deleteAssignment(req, res) {
+    },
+    delete: async function ({ assignmentId, teacher }) {
 
-    Assignment.findByIdAndRemove(req.params.id, (err, assignment) => {
-        if (err) {
-            res.send(err);
-        }
-        res.json({ message: `${assignment.nom} deleted` });
-    });
-}
+        if (isEmpty(assignmentId)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No assignment to remove.');
+
+        if (teacher.role !== EUserRole.TEACHER) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A student can\'t delete an assignment.');
+
+        const {
+            acknowledged,
+            matchedCount,
+            modifiedCount,
+        } = await AssignmentModel.updateOne(
+            { _id: assignmentId },
+            { $set: { deleted: true } },
+        );
+
+        if (!acknowledged || matchedCount === 0 || modifiedCount === 0) HttpException.throw(HTTP_STATUS.NOT_FOUND_ERROR, 'No assignment found.');
+
+    },
+};
+
+export default AssignmentsService;

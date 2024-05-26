@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "server.js",
+  "main": "src/main.js",
   "scripts": {
     "start:setup": "rimraf node_modules && npm install --verbose",
     "start:prod": "node -r dotenv/config src/main.js",
     "start:dev": "nodemon"
   },
   "author": "Rasatarivony Andirmalala Sitraka",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FelanaRasata/AngularFrontMBDS.git"
+  },
   "license": "ISC",
   "dependencies": {
     "ansi-colors": "^4.1.3",

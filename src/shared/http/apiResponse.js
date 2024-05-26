@@ -6,16 +6,16 @@ import { HttpException } from '../exception/httpException.js';
 const ApiResponse = {
     success: function (
         {
-            status = HTTP_STATUS.SUCCESS.status,
-            data = null,
-            overrideMessage = HTTP_STATUS.SUCCESS.message,
+            code,
+            message,
+            data,
         },
     ) {
 
         return {
-            status,
-            data,
-            message: overrideMessage,
+            status: code ?? HTTP_STATUS.SUCCESS.status,
+            data: data ?? null,
+            message: message ?? HTTP_STATUS.SUCCESS.message,
         };
 
     },
@@ -23,21 +23,17 @@ const ApiResponse = {
 
         Loggeo.error(error);
 
-        if (error instanceof HttpException) {
-
+        if (error instanceof HttpException)
             return { status: error.status, message: error.message, data: null };
-
-        }
 
         return {
             ...HTTP_STATUS.BAD_REQUEST_ERROR,
             message: error.message,
+            data: null,
         };
 
 
     },
 };
 
-export {
-    ApiResponse,
-};
+export default ApiResponse;

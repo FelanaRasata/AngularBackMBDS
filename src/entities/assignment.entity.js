@@ -8,9 +8,9 @@ const assignmentSchema = new mongoose.Schema(
         title: { type: String, required: true },
         student: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
         subject: { type: mongoose.Types.ObjectId, ref: 'Subject', required: true },
-        dateSending: { type: Date, required: true },
-        score: { type: Number, required: true },
-        remark: { type: String, required: true },
+        dateSending: { type: Date, required: true, default: () => new Date() },
+        score: { type: Number, required: true, default: 0 },
+        remark: { type: String, required: true, default: '' },
         confirm: { type: Boolean, required: true, default: false },
     }),
     {
@@ -21,6 +21,6 @@ const assignmentSchema = new mongoose.Schema(
 assignmentSchema.plugin(paginate);
 
 
-const AssigmentModel = mongoose.model('assignments', assignmentSchema);
+const AssignmentModel = mongoose.model('assignments', assignmentSchema);
 
-export default AssigmentModel;
+export default AssignmentModel;

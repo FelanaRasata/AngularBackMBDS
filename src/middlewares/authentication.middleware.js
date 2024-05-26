@@ -2,9 +2,9 @@ import pkg from 'jsonwebtoken';
 import SessionService from '../services/session.service.js';
 import { isEmpty } from '../shared/utils/tools.js';
 import UsersService from '../services/users.service.js';
-import { HTTP_STATUS } from '../shared/http/apiResponse.js';
 import Loggeo from '../shared/utils/logger.js';
 import { HttpException } from '../shared/exception/httpException.js';
+import HTTP_STATUS from '../shared/http/httpStatus.js';
 
 
 const { JsonWebTokenError } = pkg;
@@ -16,7 +16,7 @@ export const authenticate = async (request, response, next) => {
 
         const verificationResponse = await SessionService.retrieveTokenData(request);
         const userId = verificationResponse.userId;
-        const foundUser = await UsersService.get({ _id: userId });
+        const foundUser = await UsersService.getOne({ _id: userId });
 
         if (!isEmpty(foundUser)) {
 

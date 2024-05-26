@@ -1,31 +1,27 @@
-import HTTP_STATUS from '../http/httpStatus.js';
-
-
 export class HttpException extends Error {
 
-    constructor({ status, message }) {
+    constructor({ code, message }) {
 
         super(message);
 
-        this.status = status;
+        this.status = code;
 
-        if (Error.captureStackTrace) {
+        if (Error.captureStackTrace)
             Error.captureStackTrace(this, HttpException);
-        }
 
     }
 
 
-    static new(payload) {
+    static new(payload, overrideMessage = null) {
 
-        return new HttpException(payload);
+        return new HttpException({ payload, message: overrideMessage ?? payload.message });
 
     }
 
 
-    throw(payload) {
+    static throw(payload, overrideMessage = null) {
 
-        throw HttpException.new(payload);
+        throw HttpException.new(payload, overrideMessage);
 
     }
 

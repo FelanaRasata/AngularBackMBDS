@@ -52,10 +52,3 @@ export function toBaseModel(schemaDefinition) {
     };
 
 }
-
-
-export function toDocumentFormat(userData) {
-
-    return { ...userData, _id: String(new mongo.ObjectId()) };
-
-}

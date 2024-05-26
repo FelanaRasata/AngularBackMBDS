@@ -1,6 +1,6 @@
 import express from 'express';
 import SessionService from '../services/session.service.js';
-import { ApiResponse } from '../shared/http/apiResponse.js';
+import ApiResponse from '../shared/http/apiResponse.js';
 import HTTP_STATUS from '../shared/http/httpStatus.js';
 import { authenticate } from '../middlewares/authentication.middleware.js';
 
@@ -13,7 +13,6 @@ router.get('/login', async function (req, res) {
     try {
 
         const credentials = req.body;
-
         const result = await SessionService.signIn(credentials);
 
         res.send(

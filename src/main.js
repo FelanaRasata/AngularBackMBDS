@@ -10,11 +10,12 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { dirname, join } from 'path';
 import { DEV_MODE, PORT } from './config/apiServer.config.js';
-import AssigmentModel from './entities/assignment.entity.js';
+import AssignmentModel from './entities/assignment.entity.js';
 import Loggeo from './shared/utils/logger.js';
 import { mongooseConnect } from './shared/utils/mongooseUtils.js';
 import assignmentsRoute from './routes/assignments.route.js';
 import usersRoute from './routes/users.route.js';
+import subjectsRoute from './routes/subjects.route.js';
 
 
 runApplicationServer();
@@ -39,21 +40,6 @@ function runApplicationServer() {
 
 }
 
-
-async function init() {
-
-    await AssigmentModel.insertMany([
-        {
-            name: 'test1',
-            dueDate: dayjs().add(2, 'weeks'),
-        },
-        {
-            name: 'test2',
-            dueDate: dayjs().add(2, 'weeks'),
-        },
-    ]);
-
-}
 
 
 function setUpMiddlewares(app) {
@@ -122,6 +108,7 @@ function setUpRoutes(app) {
 
     const routes = [
         assignmentsRoute,
+        subjectsRoute,
         usersRoute,
     ];
 
