@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
-import { toBaseModel } from '../utils/mongodb.tools.js';
+import { toBaseModel } from '../shared/utils/mongooseUtils.js';
 
 
 const subjectSchema = new mongoose.Schema(

@@ -18,9 +18,9 @@ router.get('/', function (req, res) {
 
 });
 
-const assignmentsRoute = {
+const assignmentRoute = {
     router,
     path,
 };
 
-export default assignmentsRoute
+export default assignmentRoute

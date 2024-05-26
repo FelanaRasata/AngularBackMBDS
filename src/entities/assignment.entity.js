@@ -1,6 +1,6 @@
 import mongoose, { mongo } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
-import { toBaseModel } from '../utils/mongodb.tools.js';
+import { toBaseModel } from '../shared/utils/mongooseUtils.js';
 
 
 const assignmentSchema = new mongoose.Schema(

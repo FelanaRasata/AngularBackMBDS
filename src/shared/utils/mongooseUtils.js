@@ -1,6 +1,6 @@
 import mongoose, { mongo } from 'mongoose';
-import { MONGODB_DBNAME, MONGODB_PASSWORD, MONGODB_URI, MONGODB_USER } from '../config/mongodb.config.js';
-import Loggeo from './log.tools.js';
+import { MONGODB_DBNAME, MONGODB_PASSWORD, MONGODB_URI, MONGODB_USER } from '../../config/mongodb.config.js';
+import Loggeo from './logger.js';
 
 
 export const CUSTOM_LABELS = {

@@ -1,7 +1,7 @@
 import ansiColors from 'ansi-colors';
 import dayjs from 'dayjs';
 import * as util from 'util';
-import { DEV_MODE } from '../config/apiServer.config.js';
+import { DEV_MODE } from '../../config/apiServer.config.js';
 
 
 const LOG_LEVEL = {

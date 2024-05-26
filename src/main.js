@@ -11,9 +11,10 @@ import morgan from 'morgan';
 import { dirname, join } from 'path';
 import { DEV_MODE, PORT } from './config/apiServer.config.js';
 import AssigmentModel from './entities/assignment.entity.js';
-import assignmentRoute from './routes/assignments.route.js';
-import Loggeo from './utils/log.tools.js';
-import { mongooseConnect } from './utils/mongodb.tools.js';
+import Loggeo from './shared/utils/logger.js';
+import { mongooseConnect } from './shared/utils/mongooseUtils.js';
+import assignmentsRoute from './routes/assignments.route.js';
+import usersRoute from './routes/users.route.js';
 
 
 runApplicationServer();
@@ -120,7 +121,8 @@ function setUpPublicFolders(app) {
 function setUpRoutes(app) {
 
     const routes = [
-        assignmentRoute,
+        assignmentsRoute,
+        usersRoute,
     ];
 
     for (const { router, path } of routes) {

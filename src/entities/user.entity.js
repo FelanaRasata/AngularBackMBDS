@@ -1,15 +1,16 @@
 import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
-import { toBaseModel } from '../utils/mongodb.tools.js';
-import { isEmpty } from '../utils/tools.js';
+import { toBaseModel } from '../shared/utils/mongooseUtils.js';
+import { isEmpty } from '../shared/utils/tools.js';
 import bcrypt from 'bcrypt';
-import Loggeo from '../utils/log.tools.js';
+import Loggeo from '../shared/utils/logger.js';
 
 
 export const EUserRole = {
     STUDENT: 'STUDENT',
     TEACHER: 'TEACHER',
 };
+
 
 const userSchema = new mongoose.Schema(
     toBaseModel({
