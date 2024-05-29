@@ -8,14 +8,14 @@ import express from 'express';
 import figlet from 'figlet';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { dirname, join } from 'path';
-import { DEV_MODE, PORT } from './config/apiServer.config.js';
-import AssignmentModel from './entities/assignment.entity.js';
+import {dirname, join} from 'path';
+import {DEV_MODE, PORT} from './config/apiServer.config.js';
 import Loggeo from './shared/utils/logger.js';
-import { mongooseConnect } from './shared/utils/mongooseUtils.js';
+import {mongooseConnect} from './shared/utils/mongooseUtils.js';
 import assignmentsRoute from './routes/assignments.route.js';
 import usersRoute from './routes/users.route.js';
 import subjectsRoute from './routes/subjects.route.js';
+import {init} from "./init.js";
 
 
 runApplicationServer();
@@ -32,7 +32,7 @@ function runApplicationServer() {
     app.listen(PORT, '0.0.0.0', async () => {
 
         await mongooseConnect();
-        // await init();
+        await init();
 
         log();
 
@@ -41,8 +41,11 @@ function runApplicationServer() {
 }
 
 
-
 function setUpMiddlewares(app) {
+
+    // Configure CORS options
+
+    app.use(cors('*'));
 
     app.use(helmet());
     app.use(compression());
@@ -82,18 +85,6 @@ function setUpMiddlewares(app) {
 
     app.use(morgan(customMorganLogFormat));
 
-    // Configure CORS options
-    const corsOptions = {
-        origin: '*',
-        credentials: true, // Set to true if your requests include credentials (e.g., cookies, authentication headers)
-        allowedHeaders: [
-            'Content-Type',
-            'Content-Disposition',
-        ],
-    };
-
-    app.use(cors(corsOptions));
-
 }
 
 
@@ -112,7 +103,7 @@ function setUpRoutes(app) {
         usersRoute,
     ];
 
-    for (const { router, path } of routes) {
+    for (const {router, path} of routes) {
 
         app.use(`/api/${path}`, router);
 

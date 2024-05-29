@@ -8,7 +8,7 @@ import { authenticate } from '../middlewares/authentication.middleware.js';
 const router = express.Router();
 const path = 'users';
 
-router.get('/login', async function (req, res) {
+router.post('/login', async function (req, res) {
 
     try {
 

@@ -6,7 +6,7 @@ import { HttpException } from '../shared/exception/httpException.js';
 import UserModel from '../entities/user.entity.js';
 
 
-const SessionServie = {
+const SessionService = {
     retrieveToken: function (req) {
 
         const authorization = req.header('Authorization')?.split('Bearer ')[1];
@@ -40,8 +40,7 @@ const SessionServie = {
         if (isEmpty(username) || isEmpty(password)) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR);
 
         const user = await UserModel
-            .findOne({ username, role, deleted: false })
-            .lean();
+            .findOne({ username, role, deleted: false });
 
         if (isEmpty(user)) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR);
 
@@ -53,8 +52,7 @@ const SessionServie = {
 
         return { token: token, userRole: user.role };
 
-
     },
 };
 
-export default SessionServie;
+export default SessionService;
