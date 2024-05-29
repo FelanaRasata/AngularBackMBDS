@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/main.js",
   "scripts": {
-    "start:setup": "rm -r node_modules && npm install --verbose",
+    "start:setup": "npm install --verbose",
     "start:prod": "node -r dotenv/config src/main.js",
     "start:dev": "nodemon"
   },
