@@ -3,7 +3,7 @@ import { CUSTOM_LABELS } from '../shared/utils/mongooseUtils.js';
 
 
 const SubjectsService = {
-    get: async function ({ page, limit,  ...filters }) {
+    get: async function ({ page, limit, ...filters }) {
 
         return AssignmentModel.paginate(
             {

@@ -6,7 +6,6 @@ import { authenticate } from '../middlewares/authentication.middleware.js';
 
 
 const router = express.Router();
-const path = 'users';
 
 router.post('/login', async function (req, res) {
 
@@ -53,7 +52,7 @@ router.get('/current', authenticate, async function (req, res) {
 
 const usersRoute = {
     router,
-    path,
+    path: 'users',
 };
 
 export default usersRoute;

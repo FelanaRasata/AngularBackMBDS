@@ -1,5 +1,4 @@
 import env from 'env-var';
-import { DEV_MODE } from './apiServer.config.js';
 
 
 const MONGODB_URI = env.get('MONGODB_URI').required().asString();

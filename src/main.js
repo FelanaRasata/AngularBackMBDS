@@ -8,14 +8,14 @@ import express from 'express';
 import figlet from 'figlet';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import {dirname, join} from 'path';
-import {DEV_MODE, PORT} from './config/apiServer.config.js';
+import { dirname, join } from 'path';
+import { DEV_MODE, PORT } from './config/apiServer.config.js';
 import Loggeo from './shared/utils/logger.js';
-import {mongooseConnect} from './shared/utils/mongooseUtils.js';
+import { mongooseConnect } from './shared/utils/mongooseUtils.js';
 import assignmentsRoute from './routes/assignments.route.js';
 import usersRoute from './routes/users.route.js';
 import subjectsRoute from './routes/subjects.route.js';
-import {init} from "./init.js";
+import { init } from './init.js';
 
 
 runApplicationServer();
@@ -42,8 +42,6 @@ function runApplicationServer() {
 
 
 function setUpMiddlewares(app) {
-
-    // Configure CORS options
 
     app.use(cors('*'));
 
@@ -103,7 +101,7 @@ function setUpRoutes(app) {
         usersRoute,
     ];
 
-    for (const {router, path} of routes) {
+    for (const { router, path } of routes) {
 
         app.use(`/api/${path}`, router);
 

@@ -14,7 +14,7 @@ export class HttpException extends Error {
 
     static new(payload, overrideMessage = null) {
 
-        return new HttpException({ payload, message: overrideMessage ?? payload.message });
+        return new HttpException({ ...payload, message: overrideMessage ?? payload.message });
 
     }
 

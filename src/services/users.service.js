@@ -7,7 +7,7 @@ import HTTP_STATUS from '../shared/http/httpStatus.js';
 const UserService = {
     getOne: async function (query) {
 
-        if (isEmpty(query)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'Missing query on users.')
+        if (isEmpty(query)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'Missing query on users.');
 
         return UserModel
             .findOne({ ...query, deleted: false })

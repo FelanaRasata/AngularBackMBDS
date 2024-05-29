@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import { MONGODB_DBNAME, MONGODB_PASSWORD, MONGODB_URI, MONGODB_USER } from '../../config/mongodb.config.js';
 import Loggeo from './logger.js';
 import { isEmpty } from './tools.js';
@@ -21,7 +21,7 @@ export async function mongooseConnect() {
 
         const connectionOptions = {
             dbName: MONGODB_DBNAME,
-        }
+        };
 
         if (!isEmpty(MONGODB_USER) && !isEmpty(MONGODB_PASSWORD)) {
             connectionOptions.user = MONGODB_USER;

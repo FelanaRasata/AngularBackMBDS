@@ -63,6 +63,6 @@ userSchema.methods.comparePassword = async function (pwdToCompare) {
 userSchema.plugin(paginate);
 
 
-const UserModel = mongoose.model('users', userSchema);
+const UserModel = mongoose.model('User', userSchema, 'users');
 
 export default UserModel;

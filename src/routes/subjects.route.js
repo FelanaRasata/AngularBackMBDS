@@ -6,7 +6,6 @@ import { authenticate } from '../middlewares/authentication.middleware.js';
 
 
 const router = express.Router();
-const path = 'subjects';
 
 router.get('/', authenticate, async function (req, res) {
 
@@ -31,7 +30,7 @@ router.get('/', authenticate, async function (req, res) {
 
 const subjectsRoute = {
     router,
-    path,
+    path: 'subjects',
 };
 
-export default subjectsRoute
+export default subjectsRoute;

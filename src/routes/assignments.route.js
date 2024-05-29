@@ -6,13 +6,13 @@ import { authenticate } from '../middlewares/authentication.middleware.js';
 
 
 const router = express.Router();
-const path = 'assignments';
 
 router.get('/', authenticate, async function (req, res) {
 
     try {
 
-        const result = await AssignmentsService.get(req.query);
+        const user = req.user;
+        const result = await AssignmentsService.get({ options: req.query, user });
 
         res.send(
             ApiResponse.success({
@@ -128,7 +128,7 @@ router.delete('/:assignmentId', authenticate, async function (req, res) {
 
 const assignmentsRoute = {
     router,
-    path,
+    path: 'assignments',
 };
 
 export default assignmentsRoute;

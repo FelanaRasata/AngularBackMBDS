@@ -1,5 +1,6 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import { toBaseModel } from '../shared/utils/mongooseUtils.js';
 
 
@@ -19,8 +20,9 @@ const assignmentSchema = new mongoose.Schema(
 );
 
 assignmentSchema.plugin(paginate);
+assignmentSchema.plugin(aggregatePaginate);
 
 
-const AssignmentModel = mongoose.model('assignments', assignmentSchema);
+const AssignmentModel = mongoose.model('Assignment', assignmentSchema, 'assignments');
 
 export default AssignmentModel;

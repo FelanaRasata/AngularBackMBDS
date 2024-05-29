@@ -17,6 +17,6 @@ const subjectSchema = new mongoose.Schema(
 subjectSchema.plugin(paginate);
 
 
-const SubjectModel = mongoose.model('subjects', subjectSchema);
+const SubjectModel = mongoose.model('Subject', subjectSchema, 'subjects');
 
 export default SubjectModel;

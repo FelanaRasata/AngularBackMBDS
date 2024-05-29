@@ -7,12 +7,82 @@ import { EUserRole } from '../entities/user.entity.js';
 
 
 const AssignmentsService = {
-    get: async function ({ page, limit,  ...filters }) {
+    get: async function ({ options, user }) {
+
+        const { page, limit, search } = options;
+        const searchRegex = new RegExp(search, 'i');
+
+        if (user.role === EUserRole.TEACHER) {
+
+            const teacherId = user._id;
+
+            const aggregateOptions = [
+                {
+                    $lookup: {
+                        from: 'subjects',
+                        localField: 'subject',
+                        foreignField: '_id',
+                        as: 'subject',
+                    },
+                },
+                {
+                    $unwind: '$subject',
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'student',
+                        foreignField: '_id',
+                        as: 'student',
+                    },
+                },
+                {
+                    $unwind: '$student',
+                },
+                {
+                    $match: {
+                        'subject.teacher': teacherId,
+                        deleted: false,
+                        $or: [
+                            { title: searchRegex },
+                            { remark: searchRegex },
+                        ],
+                    },
+                },
+                {
+                    $project: {
+                        title: 1,
+                        student: 1,
+                        subject: 1,
+                        dateSending: 1,
+                        score: 1,
+                        remark: 1,
+                        confirm: 1,
+                    },
+                },
+            ];
+
+            const aggregate = AssignmentModel.aggregate(aggregateOptions);
+
+            return AssignmentModel.aggregatePaginate(
+                aggregate,
+                {
+                    page,
+                    limit,
+                    lean: true,
+                    customLabels: CUSTOM_LABELS,
+                },
+            );
+
+        }
 
         return AssignmentModel.paginate(
             {
-                ...filters,
                 deleted: false,
+                $or: [
+                    { title: searchRegex },
+                    { remark: searchRegex },
+                ],
             },
             {
                 page,
