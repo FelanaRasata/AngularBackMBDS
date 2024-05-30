@@ -22,10 +22,7 @@ const SubjectsService = {
                 ...filters,
                 deleted: false,
             },
-            {
-                page,
-                limit,
-            },
+            options,
         );
 
     },
