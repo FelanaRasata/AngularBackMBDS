@@ -11,8 +11,7 @@ const UserService = {
 
         return UserModel
             .findOne({ ...query, deleted: false })
-            .select('-password')
-            .lean();
+            .select('-password');
 
     },
 };

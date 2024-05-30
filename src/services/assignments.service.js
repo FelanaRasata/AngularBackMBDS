@@ -9,12 +9,31 @@ import { EUserRole } from '../entities/user.entity.js';
 const AssignmentsService = {
     get: async function ({ options, user }) {
 
-        const { page, limit, search } = options;
-        const searchRegex = new RegExp(search, 'i');
+        const { page, limit, search, confirmed } = options;
+
+        let searchOptions = {
+            deleted: false,
+        };
+
+        if (isEmpty(search)) {
+            const searchRegex = new RegExp(search, 'i');
+
+            searchOptions = {
+                $or: [
+                    { title: searchRegex },
+                    { remark: searchRegex },
+                ],
+            };
+
+        }
+
+        if (!isEmpty(confirmed))
+            searchOptions.confirm = Boolean(confirmed);
 
         if (user.role === EUserRole.TEACHER) {
 
             const teacherId = user._id;
+            searchOptions['subject.teacher'] = user._id;
 
             const aggregateOptions = [
                 {
@@ -40,24 +59,16 @@ const AssignmentsService = {
                     $unwind: '$student',
                 },
                 {
-                    $match: {
-                        'subject.teacher': teacherId,
-                        deleted: false,
-                        $or: [
-                            { title: searchRegex },
-                            { remark: searchRegex },
-                        ],
-                    },
+                    $match: searchOptions,
                 },
                 {
                     $project: {
-                        title: 1,
-                        student: 1,
-                        subject: 1,
-                        dateSending: 1,
-                        score: 1,
-                        remark: 1,
-                        confirm: 1,
+                        deleted: 0,
+                        __v: 0,
+                        'student.deleted': 0,
+                        'student.__v': 0,
+                        'subject.deleted': 0,
+                        'subject.__v': 0,
                     },
                 },
             ];
@@ -69,7 +80,6 @@ const AssignmentsService = {
                 {
                     page,
                     limit,
-                    lean: true,
                     customLabels: CUSTOM_LABELS,
                 },
             );
@@ -77,19 +87,22 @@ const AssignmentsService = {
         }
 
         return AssignmentModel.paginate(
+            searchOptions,
             {
-                deleted: false,
-                $or: [
-                    { title: searchRegex },
-                    { remark: searchRegex },
-                ],
-            },
-            {
+                select: ['-deleted', '-__v'],
                 page,
                 limit,
-                lean: true,
                 customLabels: CUSTOM_LABELS,
-                populate: ['student', 'subject'],
+                populate: [
+                    {
+                        path: 'student',
+                        select: ['-deleted', '-__v'],
+                    },
+                    {
+                        path: 'subject',
+                        select: ['-deleted', '-__v'],
+                    }
+                ],
             },
         );
 
@@ -100,15 +113,14 @@ const AssignmentsService = {
 
         return AssignmentModel
             .findOne(query)
-            .populate(['student', 'subject'])
-            .lean();
+            .populate(['student', 'subject']);
 
     },
     create: async function ({ payload, student }) {
 
-        if (isEmpty(payload)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No content to save.');
-
         if (student.role !== EUserRole.STUDENT) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A teacher can\'t create an assignment.');
+
+        if (isEmpty(payload)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No content to save.');
 
         const {
             title,

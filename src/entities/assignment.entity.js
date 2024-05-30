@@ -9,10 +9,10 @@ const assignmentSchema = new mongoose.Schema(
         title: { type: String, required: true },
         student: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
         subject: { type: mongoose.Types.ObjectId, ref: 'Subject', required: true },
-        dateSending: { type: Date, required: true, default: () => new Date() },
+        dateSending: { type: Date, default: () => new Date() },
         score: { type: Number, required: true, default: 0 },
-        remark: { type: String, required: true, default: '' },
-        confirm: { type: Boolean, required: true, default: false },
+        remark: { type: String, default: '' },
+        confirm: { type: Boolean, default: false },
     }),
     {
         timestamps: true,
