@@ -16,7 +16,7 @@ router.get('/', authenticate, async function (req, res) {
 
         res.send(
             ApiResponse.success({
-                ...HTTP_STATUS.CREATED,
+                ...HTTP_STATUS.SUCCESS,
                 data: result,
             }),
         );
@@ -38,7 +38,7 @@ router.get('/:assignmentId', authenticate, async function (req, res) {
 
         res.send(
             ApiResponse.success({
-                ...HTTP_STATUS.CREATED,
+                ...HTTP_STATUS.SUCCESS,
                 data: result,
             }),
         );
