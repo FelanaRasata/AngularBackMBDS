@@ -37,16 +37,16 @@ const SessionService = {
     signIn: async function ({ username, password, role }) {
 
 
-        if (isEmpty(username) || isEmpty(password)) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR);
+        if (isEmpty(username) || isEmpty(password)) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR, 'Missing credentials');
 
         const user = await UserModel
             .findOne({ username, role, deleted: false });
 
-        if (isEmpty(user)) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR);
+        if (isEmpty(user)) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR, 'No user found');
 
         const isMatching = await user.comparePassword(String(password));
 
-        if (!isMatching) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR);
+        if (!isMatching) HttpException.throw(HTTP_STATUS.WRONG_CREDENTIALS_ERROR, 'Password not matching');
 
         const token = this.generateToken({ userId: user._id }, API_TOKEN_EXPIRATION);
 

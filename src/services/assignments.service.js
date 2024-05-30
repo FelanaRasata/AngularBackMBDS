@@ -15,7 +15,7 @@ const AssignmentsService = {
             deleted: false,
         };
 
-        if (isEmpty(search)) {
+        if (!isEmpty(search)) {
             const searchRegex = new RegExp(search, 'i');
 
             searchOptions = {
@@ -24,11 +24,10 @@ const AssignmentsService = {
                     { remark: searchRegex },
                 ],
             };
-
         }
 
         if (!isEmpty(confirmed))
-            searchOptions.confirm = Boolean(confirmed);
+            searchOptions.confirm = confirmed === "true";
 
         if (user.role === EUserRole.TEACHER) {
 
