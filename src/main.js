@@ -107,6 +107,14 @@ function setUpRoutes(app) {
 
     }
 
+    app.get('/', (req, res) => {
+
+        const asciiArt = figlet.textSync('Assignment API working fine.', 'Pagga');
+
+        res.send(`<pre>${asciiArt}</pre>`);
+
+    });
+
 }
 
 
