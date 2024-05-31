@@ -1,15 +1,15 @@
-import {CUSTOM_LABELS} from '../shared/utils/mongooseUtils.js';
+import { CUSTOM_LABELS } from '../shared/utils/mongooseUtils.js';
 import AssignmentModel from '../entities/assignment.entity.js';
-import {isEmpty} from '../shared/utils/tools.js';
-import {HttpException} from '../shared/exception/httpException.js';
+import { isEmpty } from '../shared/utils/tools.js';
+import { HttpException } from '../shared/exception/httpException.js';
 import HTTP_STATUS from '../shared/http/httpStatus.js';
-import {EUserRole} from '../entities/user.entity.js';
+import { EUserRole } from '../entities/user.entity.js';
 
 
 const AssignmentsService = {
-    get: async function ({options, user}) {
+    get: async function ({ options, user }) {
 
-        const {page, limit, search, confirmed} = options;
+        const { page, limit, search, confirmed } = options;
 
         let searchOptions = {
             deleted: false,
@@ -21,8 +21,8 @@ const AssignmentsService = {
             searchOptions = {
                 ...searchOptions,
                 $or: [
-                    {title: searchRegex},
-                    {remark: searchRegex},
+                    { title: searchRegex },
+                    { remark: searchRegex },
                 ],
             };
         }
@@ -118,7 +118,7 @@ const AssignmentsService = {
             .populate(['student', 'subject']);
 
     },
-    create: async function ({payload, student}) {
+    create: async function ({ payload, student }) {
 
         if (student.role !== EUserRole.STUDENT) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A teacher can\'t create an assignment.');
 
@@ -140,7 +140,7 @@ const AssignmentsService = {
         return assignment;
 
     },
-    update: async function ({assignmentId, payload, teacher}) {
+    update: async function ({ assignmentId, payload, teacher }) {
 
         if (isEmpty(payload)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No assignment to update.');
 
@@ -152,20 +152,22 @@ const AssignmentsService = {
             score,
             remark,
             title,
-            dateSending
+            dateSending,
         } = payload;
+
+        if (score < 0 || score > 20) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A student score must be in range of 0 to 20.');
 
         const {
             acknowledged,
             matchedCount,
             modifiedCount,
         } = await AssignmentModel.updateOne(
-            {_id: assignmentId, student: student._id, confirm: false},
-            {$set: {confirm, score, remark, title, dateSending}},
+            { _id: assignmentId, student: student._id, confirm: false },
+            { $set: { confirm, score, remark, title, dateSending } },
         );
 
     },
-    delete: async function ({assignmentId, teacher}) {
+    delete: async function ({ assignmentId, teacher }) {
 
         if (isEmpty(assignmentId)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No assignment to remove.');
 
@@ -176,8 +178,8 @@ const AssignmentsService = {
             matchedCount,
             modifiedCount,
         } = await AssignmentModel.updateOne(
-            {_id: assignmentId},
-            {$set: {deleted: true}},
+            { _id: assignmentId },
+            { $set: { deleted: true } },
         );
 
         if (!acknowledged || matchedCount === 0 || modifiedCount === 0) HttpException.throw(HTTP_STATUS.NOT_FOUND_ERROR, 'No assignment found.');
