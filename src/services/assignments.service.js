@@ -27,11 +27,10 @@ const AssignmentsService = {
         }
 
         if (!isEmpty(confirmed))
-            searchOptions.confirm = confirmed === "true";
+            searchOptions.confirm = confirmed === 'true';
 
         if (user.role === EUserRole.TEACHER) {
 
-            const teacherId = user._id;
             searchOptions['subject.teacher'] = user._id;
 
             const aggregateOptions = [
@@ -65,6 +64,7 @@ const AssignmentsService = {
                         deleted: 0,
                         __v: 0,
                         'student.deleted': 0,
+                        'student.password': 0,
                         'student.__v': 0,
                         'subject.deleted': 0,
                         'subject.__v': 0,
@@ -85,6 +85,8 @@ const AssignmentsService = {
 
         }
 
+        searchOptions.student = user._id;
+
         return AssignmentModel.paginate(
             searchOptions,
             {
@@ -95,12 +97,12 @@ const AssignmentsService = {
                 populate: [
                     {
                         path: 'student',
-                        select: ['-deleted', '-__v'],
+                        select: ['-password', '-deleted', '-__v'],
                     },
                     {
                         path: 'subject',
                         select: ['-deleted', '-__v'],
-                    }
+                    },
                 ],
             },
         );
@@ -141,7 +143,7 @@ const AssignmentsService = {
 
         if (isEmpty(payload)) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'No assignment to update.');
 
-        if (teacher.role !== EUserRole.TEACHER) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A student can\'t create an assignment.');
+        if (teacher.role !== EUserRole.TEACHER) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A student can\'t update an assignment.');
 
         const {
             student,
@@ -155,7 +157,7 @@ const AssignmentsService = {
             matchedCount,
             modifiedCount,
         } = await AssignmentModel.updateOne(
-            { _id: assignmentId, student, confirm: false },
+            { _id: assignmentId, student: student._id, confirm: false },
             { $set: { confirm, score, remark } },
         );
 
