@@ -4,7 +4,7 @@
 A Node.js project that serves APIs for assignments.
 Un projet Node.js qui sert les APIS pour les assignements.
 
-## Installation
+### Installation
 1. Clonez the repertoire:
    ```bash
    git clone https://github.com/FelanaRasata/AngularBackMBDS.git
@@ -18,7 +18,7 @@ Un projet Node.js qui sert les APIS pour les assignements.
    npm run start:setup
    ```
 
-## Usage
+### Usage
 Pour lancer l' application localement, suivez ces étapes:
 1. Soyez sûre que MongoDB est installé est est lançé dans votre systeme.
 2. Créer un fichier `.env` dans le répertoire racine et définir les variables d'environnement suivantes :
@@ -39,10 +39,14 @@ Pour lancer l' application localement, suivez ces étapes:
    ```
 4. Accédez à l'application sur `http://localhost:<API_PORT>`
 
-## Librairies additionnelles
+### Librairies additionnelles
 - Express.js
 - MongoDB with mongoose
 - bcrypt
+
+### API
+
+
 
 ---
 
@@ -50,7 +54,7 @@ Ce fichier README.md sert de guide pour installer, exécuter et comprendre le pr
 
 ---
 
-## Authors
+### Authors
 - [Rasatarivony Andriamalala Sitraka](mailto:rasatasitraka2@gmail.com)
 - [Rasatarivony Andriharimanga Felana](mailto:rasatadiamondra@gmail.com)
 
