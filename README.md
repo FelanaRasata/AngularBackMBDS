@@ -1,11 +1,10 @@
-# Projet final - Assignments  (Backend)
+# Projet final - Assignments  (API)
 
-## Project Description
-A Node.js project that serves APIs for assignments.
-Un projet Node.js qui sert les APIS pour les assignements.
+## Description du projet
+Un projet Node.js qui sert les APIS pour les `assignments`.
 
 ### Installation
-1. Clonez the repertoire:
+1. Clonez the dépôt:
    ```bash
    git clone https://github.com/FelanaRasata/AngularBackMBDS.git
    ```
@@ -39,14 +38,123 @@ Pour lancer l' application localement, suivez ces étapes:
    ```
 4. Accédez à l'application sur `http://localhost:<API_PORT>`
 
-### Librairies additionnelles
+### Librairies de base
 - Express.js
 - MongoDB with mongoose
 - bcrypt
 
-### API
+### Informations sur le projet
 
+### **Initialisation**
 
+Au démarrage, les données de test sont chargées depuis le fichier `src/init.js` si elles ne figurent pas déjà dans la base de données.
+
+### **Détails des APIs**
+
+#### **Utilisateurs**
+
+**Connexion d’un utilisateur**
+
+`POST api/users/login`
+
+**Paramètres :**
+- `username` (string) : Nom d'utilisateur
+- `password` (string) : Mot de passe
+- `role` (string) : Rôle de l'utilisateur
+
+**Réponses :**
+- `201` : 🟢 Token créé
+- `400` : 🔴 Mauvaise requête
+- `402` : 🔴 Identifiants incorrects
+
+**Récupérer l’utilisateur en cours**
+
+`GET api/users/current`
+
+**Réponses :**
+- `200` : 🟢 OK
+- `401` : 🔴 Non autorisé
+
+#### **Matières**
+
+**Obtenir la liste des matières**
+
+`GET api/subjects`
+
+**Réponses :**
+- `200` : 🟢 OK
+- `400` : 🔴 Mauvaise requête
+
+#### **Devoirs**
+
+**Pour tous les utilisateurs**
+
+**Obtenir la liste des devoirs avec pagination et recherche simple**
+
+`GET api/assignments`
+
+**Paramètres :**
+- `size` (number) : Taille de la page
+- `limit` (number) : Nombre maximum d'éléments par page
+- `search` (string) : Terme de recherche
+
+**Réponses :**
+- `200` : 🟢 OK
+- `400` : 🔴 Mauvaise requête
+
+**Obtenir un devoir par son ID**
+
+`GET api/assignments/:id`
+
+**Paramètres :**
+- `id` (string) : Identifiant du devoir
+
+**Réponses :**
+- `200` : 🟢 OK
+- `400` : 🔴 Mauvaise requête
+
+**Pour les étudiants**
+
+**Créer un devoir**
+
+`POST api/assignments`
+
+**Corps de la requête :**
+- `assignment` (Assignment) : Détails du devoir
+
+**Réponses :**
+- `201` : 🟢 Créé
+- `400` : 🔴 Mauvaise requête
+- `404` : 🔴 Non trouvé
+
+**Pour les enseignants**
+
+**Modifier un devoir**
+
+`PUT api/assignments/:id`
+
+**Paramètres :**
+- `id` (string) : Identifiant du devoir
+
+**Corps de la requête :**
+- `assignment` (Assignment) : Détails du devoir à mettre à jour
+
+**Réponses :**
+- `204` : 🟢 Pas de contenu (modification réussie)
+- `400` : 🔴 Mauvaise requête
+- `404` : 🔴 Non trouvé
+
+**Supprimer un devoir**
+
+`DELETE api/assignments/:id`
+
+**Paramètres :**
+- `id` (string) : Identifiant du devoir
+
+**Réponses :**
+- `204` : 🟢 Pas de contenu (suppression réussie)
+- `400` : 🔴 Mauvaise requête
+- `404` : 🔴 Non trouvé
 
 ---
 

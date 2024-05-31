@@ -61,6 +61,9 @@ const AssignmentsService = {
                     $match: searchOptions,
                 },
                 {
+                    $sort: { updatedAt: -1 },
+                },
+                {
                     $project: {
                         deleted: 0,
                         __v: 0,
@@ -91,6 +94,7 @@ const AssignmentsService = {
         return AssignmentModel.paginate(
             searchOptions,
             {
+                sort: { updatedAt: -1 },
                 select: ['-deleted', '-__v'],
                 page,
                 limit,
@@ -157,14 +161,14 @@ const AssignmentsService = {
 
         if (score < 0 || score > 20) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'A student score must be in range of 0 to 20.');
 
-        const {
-            acknowledged,
-            matchedCount,
-            modifiedCount,
-        } = await AssignmentModel.updateOne(
+        const { acknowledged, matchedCount, modifiedCount } = await AssignmentModel.updateOne(
             { _id: assignmentId, student: student._id, confirm: false },
             { $set: { confirm, score, remark, title, dateSending } },
         );
+
+        console.log({ matchedCount, modifiedCount });
+
+        if (!acknowledged || matchedCount === 0) HttpException.throw(HTTP_STATUS.BAD_REQUEST_ERROR, 'Can\'t perform update on this data.');
 
     },
     delete: async function ({ assignmentId, teacher }) {
