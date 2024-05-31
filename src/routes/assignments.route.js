@@ -84,6 +84,7 @@ router.put('/:assignmentId', authenticate, async function (req, res) {
         const assignmentId = req.params['assignmentId'];
         const teacher = req.user;
 
+
         await AssignmentsService.update({
             assignmentId,
             payload: req.body,

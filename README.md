@@ -2,26 +2,26 @@
 
 ## Project Description
 A Node.js project that serves APIs for assignments.
-
+Un projet Node.js qui sert les APIS pour les assignements.
 
 ## Installation
-1. Clone the repository:
+1. Clonez the repertoire:
    ```bash
-   git clone https://github.com/FelanaRasata/AngularFrontMBDS.git
+   git clone https://github.com/FelanaRasata/AngularBackMBDS.git
    ```
-2. Navigate to the project directory:
+2. Naviguez vers le dossier du projet:
    ```bash 
-   cd AngularFrontMBDS
+   cd AngularBackMBDS
    ```
-3. Install dependencies:
+3. Installez les dépendances:
    ```bash
    npm run start:setup
    ```
 
 ## Usage
-To run the application locally, follow these steps:
-1. Ensure MongoDB is installed and running on your system.
-2. Create a `.env` file in the root directory and define the following environment variables:
+Pour lancer l' application localement, suivez ces étapes:
+1. Soyez sûre que MongoDB est installé est est lançé dans votre systeme.
+2. Créer un fichier `.env` dans le répertoire racine et définir les variables d'environnement suivantes :
    ```dotenv
     API_HOST=
     API_PORT=
@@ -33,20 +33,20 @@ To run the application locally, follow these steps:
     MONGODB_PASSWORD=
     MONGODB_DBNAME=
    ```
-3. Start the application:
+3. Lancez l' application:
    ```bash
    npm run start:dev
    ```
-4. Access the application at `http://localhost:<API_PORT>`
+4. Accédez à l'application sur `http://localhost:<API_PORT>`
 
-## Additional Libraries
+## Librairies additionnelles
 - Express.js
 - MongoDB with mongoose
 - bcrypt
 
 ---
 
-This README.md serves as a guide to install, run, and understand the project. For more detailed information, please refer to the codebase and additional resources provided.
+Ce fichier README.md sert de guide pour installer, exécuter et comprendre le projet. Pour des informations plus détaillées, veuillez vous référer à la base de code et aux ressources supplémentaires fournies.
 
 ---
 
